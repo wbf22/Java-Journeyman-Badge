@@ -32,16 +32,16 @@ public class DefenderThread implements Runnable{
 
 
       while (!fileBattleManager.getBattleWon()){
-        TimeUnit.MILLISECONDS.sleep(FileBattleManager.getSleepTime());
+        TimeUnit.MILLISECONDS.sleep(FileBattleManager.getSleepTime() - 3000);
 
         Crawler crawler = new Crawler(
             "trophy.txt", pathBattlesFolder);
         Files.walkFileTree(pathBattlesFolder, crawler);
         if (crawler.getFoundFileLocation().equals(trophyInBorder)){
           Files.move(Paths.get(trophyInBorder), Paths.get(trophyInHome));
-          if (team == 0) { System.out.print(Colors.ANSI_RED); System.out.println("Defender From Team 1 Blocks Attacker from Team 2!! ;|"); }
+          if (team == 0) { System.out.print(Colors.ANSI_RED); System.out.println("Defender From Team 1 Pulled the file into Zone7!! ;|"); }
           System.out.print(Colors.ANSI_RESET);
-          if (team == 1) { System.out.print(Colors.ANSI_BLUE); System.out.println("Defender From Team 2 Blocks Attacker from Team 1!! ;|"); }
+          if (team == 1) { System.out.print(Colors.ANSI_BLUE); System.out.println("Defender From Team 2 Pulled the file into Zone2!! ;|"); }
           System.out.print(Colors.ANSI_RESET);
         }
 

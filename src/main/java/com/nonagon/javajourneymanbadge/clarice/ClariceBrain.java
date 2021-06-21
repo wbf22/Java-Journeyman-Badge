@@ -329,7 +329,7 @@ public class ClariceBrain{
                 System.out.println(bufferedReader.readLine());
             }
 
-
+            bufferedReader.close();
         } catch (IOException e) { e.printStackTrace(); }
     }
 

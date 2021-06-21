@@ -2,11 +2,19 @@ package com.nonagon.javajourneymanbadge.fileBattles;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.nio.file.attribute.*;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import com.nonagon.javajourneymanbadge.clarice.ClariceBrain;
 import com.nonagon.javajourneymanbadge.printColors.Colors;
 
 
@@ -18,10 +26,10 @@ public class FileBattleManager {
 
 
   public void battle() throws IOException, InterruptedException {
+    printIntro();
     teamAssigner = new TeamAssigner();
-    System.out.println("      File Battle!");
     printFileStructure();
-    System.out.println("Start");
+    System.out.println("GO!!!!");
 
     Thread defender1 = new Thread(new DefenderThread(this));
     defender1.start();
@@ -69,33 +77,103 @@ public class FileBattleManager {
 
     }
     printFileStructure();
-    System.out.println("Team " + (winner + 1) + " is the winner!");
+    winner++;
+    System.out.println("Team " + winner + " is the winner!");
+    TimeUnit.MILLISECONDS.sleep(3000);
+    if (winner == 1){ System.out.print(Colors.ANSI_RED); }
+    else { System.out.print(Colors.ANSI_BLUE); }
+    ClariceBrain.printFile(ClariceBrain.FIREWORKS);
+    ClariceBrain.printFile(getPathFolderLocationOfTrophy().toAbsolutePath().toString());
+    System.out.print(Colors.ANSI_RESET);
+
     defender1.join();
     defender2.join();
     attacker1.join();
     attacker2.join();
 
 
+    if(winner == 1) { setReigningChampions("Team 1");}
+    if(winner == 2) { setReigningChampions("Team 2");}
+    setLastMatchDate();
     moveTrophyBackToMiddle();
+    TimeUnit.MILLISECONDS.sleep(3000);
+    ClariceBrain.printFile(ClariceBrain.CLARICE_SMILE);
 
 
   }
 
-  private void moveTrophyBackToMiddle() throws IOException {
-    Path trophyFileLocation =Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone1/trophy.txt");
-    Path middleLocation;
+  private void printIntro() throws InterruptedException, IOException {
+    System.out.println("---------FILE BATTLE!!!!!----------");
+    System.out.println("Team 1: " + Colors.ANSI_RED + ";) :| home zone: zone8");
+    System.out.print(Colors.ANSI_RESET);
+    System.out.println("Team 2: " + Colors.ANSI_BLUE + ":) :| home zone: zone1");
+    System.out.print(Colors.ANSI_RESET);
+    System.out.println("Teams will face off in a challenge to bring the \n" +
+        "trophy file back to their respective zones.\n" +
+        "Defenders on each team must stay one zone away\n" +
+        "from their home zone, but both attackers can\n" +
+        "move to any zone. The first team to bring the trophy\n" +
+        "to their home zone wins!");
+    System.out.println();
+    System.out.println("This rounds reigning champions: " + getReigningChampions() + "!!!!!");
+    System.out.println("Last Match was on the Date: " + getLastMatchDate());
+    System.out.println("Brought to you by " + getOwnerName());
 
-    Folder battleFolder = walkDirectory(Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles"));
-    for ( Folder folder : battleFolder.getFolders()){
-      if (folder.getFiles().size() > 0){
-        trophyFileLocation = Paths.get( "src/main/java/com/nonagon/javajourneymanbadge/fileBattles/" + folder.getFileName() + "/" + folder.getFiles().get(0));
-      }
+    TimeUnit.MILLISECONDS.sleep(5000);
+  }
+
+  private String getOwnerName() throws IOException {
+    Path trophy = getPathFolderLocationOfTrophy();
+    FileOwnerAttributeView posixFileAttributeView = Files.getFileAttributeView(trophy, FileOwnerAttributeView.class);
+    return posixFileAttributeView.getOwner().getName();
+  }
+
+  private Date getLastMatchDate() throws IOException {
+    Path trophy = getPathFolderLocationOfTrophy();
+    BasicFileAttributeView basicFileAttributeView = Files.getFileAttributeView(trophy, BasicFileAttributeView.class);
+    return new Date(basicFileAttributeView.readAttributes().lastModifiedTime().toMillis());
+  }
+
+  private void setLastMatchDate() throws IOException {
+    Path trophy = getPathFolderLocationOfTrophy();
+    BasicFileAttributeView basicFileAttributeView = Files.getFileAttributeView(trophy, BasicFileAttributeView.class);
+    BasicFileAttributes basicFileAttributes = basicFileAttributeView.readAttributes();
+    FileTime fileTime = FileTime.fromMillis(System.currentTimeMillis());
+    basicFileAttributeView.setTimes(fileTime, basicFileAttributes.lastAccessTime(), basicFileAttributes.creationTime());
+  }
+
+  private String getReigningChampions() throws IOException {
+    try{
+      Path trophy = getPathFolderLocationOfTrophy();
+      UserDefinedFileAttributeView userDefinedFileAttributeView = Files.getFileAttributeView(trophy, UserDefinedFileAttributeView.class);
+      ByteBuffer dst = ByteBuffer.allocate(userDefinedFileAttributeView.size("ReigningChampions"));
+      userDefinedFileAttributeView.read("ReigningChampions", dst);
+      dst.flip();
+      return new String(dst.array(), "UTF-8");
+
+    }catch (Exception e){
+      return "null";
     }
 
+  }
 
-    Random random = new Random(System.nanoTime());
-    if (random.nextBoolean()) { middleLocation = Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone4/trophy.txt"); }
-    else { middleLocation = Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone5/trophy.txt"); }
+  private void setReigningChampions(String newOwners) throws IOException {
+    Path trophy = getPathFolderLocationOfTrophy();
+    UserDefinedFileAttributeView userDefinedFileAttributeView = Files.getFileAttributeView(trophy, UserDefinedFileAttributeView.class);
+    byte[] bytes = newOwners.getBytes("UTF-8");
+    ByteBuffer buf = ByteBuffer.allocate(bytes.length);
+    buf.put(bytes);
+    buf.flip();
+    userDefinedFileAttributeView.write("ReigningChampions", buf);
+  }
+
+  private void moveTrophyBackToMiddle() throws IOException {
+    Path trophyFileLocation = getPathFolderLocationOfTrophy();
+    Path middleLocation;
+
+    Random random = new Random(System.nanoTime() + System.currentTimeMillis());
+    if (random.nextBoolean()) { middleLocation = Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone5/trophy.txt"); }
+    else { middleLocation = Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone4/trophy.txt"); }
 
     Files.move(trophyFileLocation, middleLocation);
 
@@ -127,6 +205,17 @@ public class FileBattleManager {
     return currentFolder;
   }
 
+  private Path getPathFolderLocationOfTrophy() throws IOException {
+    Path trophyFileLocation = Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone1/trophy.txt");
+    Folder battleFolder = walkDirectory(Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles"));
+    for ( Folder folder : battleFolder.getFolders()){
+      if (folder.getFiles().size() > 0){
+        trophyFileLocation = Paths.get( "src/main/java/com/nonagon/javajourneymanbadge/fileBattles/" + folder.getFileName() + "/" + folder.getFiles().get(0));
+      }
+    }
+    return trophyFileLocation;
+  }
+
   private int findNewFolderLocationOfTrophy() throws IOException {
     Folder battleFolder = walkDirectory(Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles"));
 
@@ -142,7 +231,8 @@ public class FileBattleManager {
 
   public static int getSleepTime(){
     Random random = new Random(System.nanoTime());
-    return random.nextInt(12000) + 4000;
+    int sub = (random.nextBoolean()) ? 1000 : -1000;
+    return random.nextInt(12000) + 4000 + sub;
   }
 
   public Boolean getBattleWon() {

@@ -37,22 +37,45 @@ in a while.
 
 [comment]: <> (Using a Java codebase you are working in, show examples &#40;or blatant violations&#41; of the following object-oriented principles &#40;SOLID&#41;:)
 
+In fileBattes > FileBattleManager.java I split up a function that was going to move a file
+and then return it's location into two functions. 
 [comment]: <> (Single Responsibility Principle)
 
+In cmisx-unit for queries that go to graphql we have a separate query object for each unique query.
+This is better than having all the queries in the same class or something like that. Doing this, to 
+add a new query we just have to make a new query class and then add a function to the graphql client.
+Perhaps this could be better followed if the graphql client had just one function which took a generic query
+and returned a generic object. However, if we did this then we'd have to find a way to map the json
+in the response to an object at some point. 
 [comment]: <> (Open/Closed Principle)
 
+In printColors > I created an interface of ColorPrinter which the other classes I made implemented.
+I then could have the print something and know they would print some sort of color display.
 [comment]: <> (Liskov Substitution Principle)
 
+In cmisx-member-updates-worker we create to jpa repository interfaces for each database instead of one.
+If they where together there would be functions that a user would need that were available.
 [comment]: <> (Interface Segregation Principle)
 
+I couldn't find a very good example of this principle but in cmisx-member-updates-worker the same two interfaces
+abstract the two query methods that are implemented by jpa under the hood. The force the user to use the
+interface they actually need and nothing else. 
 [comment]: <> (Dependency Inversion Principle)
 
 ## JVM Concepts
 
 ### Configuration
 
+The JVM Memory Model describes how variables are stored during runtime. It's an abstraction over how they are
+actually stored in the computer. In a thread or process, local variables are stored on the threads' stack. If
+these variables are primitive types, the variable is actually stored in the stack. If the variable is an object,
+then only a reference is stored on the stack and the actual object is stored in the heap. Static variables are
+stored on the heap in the class definition. 
 [comment]: <> (Describe the JVM Memory Model)
 
+When you set up your JVM there are different options you can use to change the size of the heap and change 
+parameters for garbage collection. For most things the defaults seem to be good and tend to be more stable.
+First you should see if you can't optimize speed by writing the code in a better way.
 [comment]: <> (Describe how one would tune the JVM perfomance characteristics)
 
 [comment]: <> (Describe how you would use JMX to monitor the JVM)
@@ -151,8 +174,11 @@ In fileBattles > FileBattleManager I use DirectoryStream to print out the file s
 In fileBattles > DefenderThread.java I use a FileVisitor which I implemented as Crawler.java.
 [comment]: <> (Recursively access a directory tree using the DirectoryStream and FileVisitor interfaces)
 
+In filebattes > FileBattleManager.java I changed the lastModified time of file with BasicFileAttributes.
+I also got the owner of the file with PosixFileAttributes. I also added a custom file attribute.
 [comment]: <> (&#40;stretch&#41; Read and change file and directory attributes, focusing on the BasicFileAttributes, DosFileAttributes, and PosixFileAttributes interfaces)
 
+In fileBattles > Crawler.java I use PathMatcher when scanning a file tree.
 [comment]: <> (&#40;stretch&#41; Find a file with the PathMatcher interface)
 
 fileBattles > FileBattleManager.java uses a WatchService to print out the file structure whenever there is a change in the fileBattles 
