@@ -343,7 +343,7 @@ public class ClariceBrain{
             while(applicationOn){
 
                 try {
-                    TimeUnit.MILLISECONDS.sleep(1000);
+                    TimeUnit.MILLISECONDS.sleep(2000);
                     boolean sing = true;
                     for(int i = 0; i < 6; i++){
                         if(!random.nextBoolean()){

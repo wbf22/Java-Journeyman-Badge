@@ -19,15 +19,15 @@ public class DefenderThread implements Runnable{
 
     try {
       Path pathBattlesFolder = Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles");
-      Path trophyInHome = null;
-      Path trophyInBorder = null;
+      String trophyInHome = null;
+      String trophyInBorder = null;
       if (team == 0) {
-        trophyInHome = Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone7/trophy.txt");
-        trophyInBorder = Paths.get("src\\main\\java\\com\\nonagon\\javajourneymanbadge\\fileBattles\\zone6\\trophy.txt");
+        trophyInHome = "src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone7/trophy.txt";
+        trophyInBorder = "src\\main\\java\\com\\nonagon\\javajourneymanbadge\\fileBattles\\zone6\\trophy.txt";
       }
       else {
-        trophyInHome = Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone2/trophy.txt");
-        trophyInBorder = Paths.get("src\\main\\java\\com\\nonagon\\javajourneymanbadge\\fileBattles\\zone3\\trophy.txt");
+        trophyInHome = "src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone2/trophy.txt";
+        trophyInBorder = "src\\main\\java\\com\\nonagon\\javajourneymanbadge\\fileBattles\\zone3\\trophy.txt";
       }
 
 
@@ -38,10 +38,10 @@ public class DefenderThread implements Runnable{
             "trophy.txt", pathBattlesFolder);
         Files.walkFileTree(pathBattlesFolder, crawler);
         if (crawler.getFoundFileLocation().equals(trophyInBorder)){
-          Files.move(trophyInBorder, trophyInHome);
-          if (team == 0) System.out.print(Colors.ANSI_RED); System.out.println("Defender From Team 1 Blocks Attacker from Team 2!! :)");
+          Files.move(Paths.get(trophyInBorder), Paths.get(trophyInHome));
+          if (team == 0) { System.out.print(Colors.ANSI_RED); System.out.println("Defender From Team 1 Blocks Attacker from Team 2!! ;|"); }
           System.out.print(Colors.ANSI_RESET);
-          if (team == 1) System.out.print(Colors.ANSI_BLUE); System.out.println("Defender From Team 2 Blocks Attacker from Team 1!! :)");
+          if (team == 1) { System.out.print(Colors.ANSI_BLUE); System.out.println("Defender From Team 2 Blocks Attacker from Team 1!! ;|"); }
           System.out.print(Colors.ANSI_RESET);
         }
 

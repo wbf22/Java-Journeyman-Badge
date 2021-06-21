@@ -2,6 +2,8 @@ package com.nonagon.javajourneymanbadge.fileBattles;
 
 import java.util.ArrayList;
 
+import com.nonagon.javajourneymanbadge.printColors.Colors;
+
 public class Folder {
 
   String fileName;
@@ -33,18 +35,28 @@ public class Folder {
   }
 
   public void printFolder(){
-    printFol(0);
+    printFol(0, 0);
   }
 
-  private void printFol(int offset){
+  private void printFol(int offset, int addOn){
     offset(offset);
-    System.out.println(fileName);
-    for (Folder folder : folders){
-      folder.printFol(offset + 1);
+    String printDefenderEmoji = (addOn == 1 || addOn == 6) ? " :|" : "";
+    System.out.println(fileName + printDefenderEmoji);
+    for (int i = 0; i < folders.size(); i++){
+      if ( i < 2 ) System.out.print(Colors.ANSI_BLUE);
+      if ( i > 5 ) System.out.print(Colors.ANSI_RED);
+      folders.get(i).printFol(offset + 1, i);
+      System.out.print(Colors.ANSI_RESET);
     }
     for (String file : files){
       offset(offset + 1);
-      System.out.println(file);
+      System.out.print(Colors.ANSI_YELLOW);
+      System.out.print(file);
+      System.out.print(Colors.ANSI_BLUE);
+      System.out.print(" :)");
+      System.out.print(Colors.ANSI_RED);
+      System.out.print(" ;)");
+      System.out.println();
     }
 
   }

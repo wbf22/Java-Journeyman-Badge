@@ -23,7 +23,9 @@ public class AttackerThread implements Runnable{
     pathBattlesFolder = Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles");
     while (!fileBattleManager.getBattleWon()) {
       try {
-        TimeUnit.MILLISECONDS.sleep(fileBattleManager.getSleepTime());
+        int sleeptime = fileBattleManager.getSleepTime();
+        TimeUnit.MILLISECONDS.sleep(sleeptime);
+        //System.out.println(sleeptime + " Attacker " + team);
 
         moveFileOneFolder(team);
 
@@ -40,9 +42,9 @@ public class AttackerThread implements Runnable{
 
     Crawler crawler = new Crawler("trophy.txt", pathBattlesFolder);
     Files.walkFileTree(pathBattlesFolder, crawler);
-//    if (crawler.getFoundFileLocation().contains("7")){
-//      Files.move(Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone7/trophy.txt"), Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone" + (7 + direction) + "/trophy.txt"));
-//    }
+    if (crawler.getFoundFileLocation().contains("7")){
+      Files.move(Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone7/trophy.txt"), Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone" + (7 + direction) + "/trophy.txt"));
+    }
     if (crawler.getFoundFileLocation().contains("6")){
       Files.move(Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone6/trophy.txt"), Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone" + (6 + direction) + "/trophy.txt"));
     }
@@ -55,9 +57,9 @@ public class AttackerThread implements Runnable{
     if (crawler.getFoundFileLocation().contains("3")){
       Files.move(Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone3/trophy.txt"), Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone" + (3 + direction) + "/trophy.txt"));
     }
-//    if (crawler.getFoundFileLocation().contains("2")){
-//      Files.move(Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone2/trophy.txt"), Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone" + (2 + direction) + "/trophy.txt"));
-//    }
+    if (crawler.getFoundFileLocation().contains("2")){
+      Files.move(Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone2/trophy.txt"), Paths.get("src/main/java/com/nonagon/javajourneymanbadge/fileBattles/zone" + (2 + direction) + "/trophy.txt"));
+    }
 
 
 
