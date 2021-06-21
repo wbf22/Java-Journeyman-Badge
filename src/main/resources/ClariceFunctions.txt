@@ -1,0 +1,34 @@
+
+
+
+          Clarice's Main Functions
+|*******************************************|
+|                                           |
+| info - this text                          |
+|                                           |
+| thread pic - A thread pool prints         |
+|   out a picture                           |
+|                                           |
+| thread dance - a cute dance by the        |
+|   threads                                 |
+|                                           |
+| colors - a random color display           |
+|   for your entertainment                  |
+|                                           |
+| billy - calls billy, Clarice's            |
+|   friend                                  |
+|                                           |
+|                                           |
+|                                           |
+|                                           |
+|                                           |
+|                                           |
+|                                           |
+|                                           |
+|                                           |
+|                                           |
+|                                           |
+|                                           |
+|                                           |
+|                                           |
+|*******************************************|
