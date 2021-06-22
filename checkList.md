@@ -78,6 +78,8 @@ parameters for garbage collection. For most things the defaults seem to be good 
 First you should see if you can't optimize speed by writing the code in a better way.
 [comment]: <> (Describe how one would tune the JVM perfomance characteristics)
 
+You can use jconsole to see how an application uses resources and performs. There's also other tools that
+integrate with JMX to help you monitor an application. 
 [comment]: <> (Describe how you would use JMX to monitor the JVM)
 
 ### Threads
@@ -107,13 +109,17 @@ genericFork > ForkManager.java uses the fork join framework.
 
 
 ### Exceptions and Assertions
-
+in trys > trys.java I made a try with two catch blocks for different exceptions. The finally clause prints out
+a message afterwards. 
 [comment]: <> (Develop code that handles multiple Exception types in a single catch block and implements finally)
 
+Also in trys > trys.java I made a try with function that uses scanner which is auto closeable. 
 [comment]: <> (Develop code that uses try-with-resources statements &#40;including using classes that implement the AutoCloseable interface&#41; - Java 7/8)
 
+trys > ClariceSillyException.java is a custom exception that inherits just from the base class Exception.
 [comment]: <> (Create custom exceptions)
-
+ 
+in test > ExceptionTests.java I made a class that uses assertThrows to test to see if an exception was thrown. 
 [comment]: <> (&#40;stretch&#41; Test invariants by using assertions)
 
 ## JDK Libraries

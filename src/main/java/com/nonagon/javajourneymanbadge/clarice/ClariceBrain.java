@@ -12,6 +12,7 @@ import com.nonagon.javajourneymanbadge.printColors.Wheel;
 import com.nonagon.javajourneymanbadge.rap.Rap;
 import com.nonagon.javajourneymanbadge.threads.Threads;
 import com.nonagon.javajourneymanbadge.threads.beepBop.PlayWithRobots;
+import com.nonagon.javajourneymanbadge.trys.Trys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -262,6 +263,10 @@ public class ClariceBrain{
                     case "FOLDER_BATTLE_CLAUSES":
                         FileBattleManager fileBattleManager = new FileBattleManager();
                         fileBattleManager.battle();
+
+                    case "EXCEPTION_CLAUSES":
+                        Trys trys = new Trys();
+                        trys.doAllExceptionStuff();
 
                 }
             }catch (Exception e){
