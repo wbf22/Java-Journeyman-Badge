@@ -135,27 +135,35 @@ On line 148 of genericFork > ForkManager.java I use the diamond to initialize an
 Collections that use raw or generic types are very useful as any types can be stored in them.
 [comment]: <> (Analyze the interoperability of collections that use raw types and generic types)
 
-
+In graphing > grapher.java I use the BigDecimal wrapper class to do math. I believe it uses autoboxing and
+unboxing behind the scenes.
 [comment]: <> (Use wrapper classes, autoboxing and unboxing)
 
+In graphing > Point.java I implemented the comparable interface.
 [comment]: <> (Use java.util.Comparator and java.lang.Comparable)
 
+In graphing > Grapher.java I sorted a list of Point objects in the getPointsForFunction method.
 [comment]: <> (Sort and search arrays and lists)
 
+I use Lists all throughout this project. I used a Set implementation in 
 [comment]: <> (&#40;stretch&#41; Create and use List, Set and Deque implementations)
 
+In grpahing > grapher.java I use a Multimap which is a map implementation. 
 [comment]: <> (&#40;stretch&#41; Create and use Map implementations)
 
 ### String Processing
-
+misc > RandomWord.java uses Scanner to read in a large file of english words. 
+parsing > KeywordManager.java uses StringTokenizer to read user input.
+I use StringBuilder all over the place.
 [comment]: <> (Search, parse and build strings &#40;including Scanner, StringTokenizer, StringBuilder, String and Formatter&#41;)
+
 In ClariceBrain.java checkForKeyWords() uses regex to parse input
 looking for keywords.
-
 [comment]: <> (Search, and replace strings by using regular expressions, using expression patterns for matching limited to: . &#40;dot&#41;, * &#40;star&#41;, + &#40;plus&#41;, ?, \d, \D, \s, \S,  \w, \W, \b, \B, [], &#40;&#41;.)
 
 [comment]: <> (Format strings using the formatting parameters: %b, %c, %d, %f, and %s in format strings.)
 
+Create and use Map implementations
 ### Java I/O Fundamentals
 In Threads.java in the threads package threadPicture() uses DataStream input and output. 
 BufferedReader, File and FileReader are used in printFile() in ClariceBrain.java.  

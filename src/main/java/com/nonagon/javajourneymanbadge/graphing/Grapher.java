@@ -4,6 +4,13 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.*;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import com.nonagon.javajourneymanbadge.graphing.comparators.FunctionComparater;
+import com.nonagon.javajourneymanbadge.graphing.functions.Function;
+import com.nonagon.javajourneymanbadge.graphing.functions.Polynomial;
+import com.nonagon.javajourneymanbadge.graphing.functions.X;
+
 public class Grapher {
 
 //height
@@ -23,7 +30,7 @@ public class Grapher {
 //           5       10      15
 
 
-  private BigDecimal spacing = BigDecimal.valueOf(.2);
+  private BigDecimal spacing = BigDecimal.valueOf(1);
   private int width = 80; //number of grid squares x
   private int height = 80; //number of grid squares y
   private String[][] currentGraphState = new String[height + 3][width + 4];
@@ -32,12 +39,18 @@ public class Grapher {
   private String leftPadding = "         ";
   private String emptyCell = "    ";
   private MathContext mContext = new MathContext(step.precision());
+  private BigDecimal samplesForPlottingPerCell = BigDecimal.valueOf(1);
 
-  public void graph(Map<BigDecimal, BigDecimal> points, ArrayList<String> functions){
+  public void graph(Multimap<BigDecimal, BigDecimal> points, ArrayList<Function> functions){
     initGraph();
+    points.asMap().forEach((key, collection) -> {
+      for (BigDecimal y : collection) {
+        plotPoint(key, y);
+      }
+    });
 
-    for (Map.Entry<BigDecimal, BigDecimal> entry : points.entrySet()) {
-      plotPoint(entry.getKey(), entry.getValue());
+    for (Function f : functions){
+      plotFunction(f);
     }
 
     printGraph();
@@ -86,13 +99,74 @@ public class Grapher {
     int yc = getCellForPoint(y);
     if (xc + 1 < width && yc + 2 < height){
       StringBuilder stringBuilder = new StringBuilder();
-      stringBuilder.append(currentGraphState[yc+2][xc+1]);
+      stringBuilder.append(currentGraphState[yc+1][xc+1]);
       stringBuilder.setCharAt(1, '*');
       currentGraphState[yc+1][xc+1] = stringBuilder.toString();
     }
   }
+  private void plotFunction(Function function){
+    Set<Point> points = getPointsForFunction(function);
+
+    for (Point p : points){
+      plotPoint(p.getX(), p.getY());
+    }
+
+  }
+  private void integrateFunctions(List<Function> functions, double rangeStart, double rangeEnd){
+    initGraph();
+
+    for (Function f : functions){
+      plotFunction(f);
+    }
+
+    drawIntegrationLines(rangeStart, rangeEnd);
+
+    printGraph();
+
+    Collections.sort(functions, new FunctionComparater(rangeStart, rangeEnd));
+    Collections.reverse(functions);
+    for (Function f : functions){
+      System.out.println(String.format(f.toString() + " integral:%s", f.integrate(0.01, 4,12).toString()));
+    }
+
+  }
 
   //helper functions
+  private void drawIntegrationLines(double rangeStart, double rangeEnd){
+    for (int y = 0; y < height + 2; y++){
+      for (int x = (int)rangeStart; x < rangeEnd; x++){
+        if (currentGraphState[y][x].contains("*")){
+          drawLineDown(x,y, rangeStart, rangeEnd);
+        }
+      }
+    }
+  }
+  private void drawLineDown(int x, int y, double rangeStart, double rangeEnd){
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append(emptyCell);
+    stringBuilder.setCharAt(1, '|');
+    for (int i = y; i > 0; i--){
+      if (currentGraphState[i][x].equals(emptyCell)){
+        currentGraphState[i][x] = stringBuilder.toString();
+      }
+    }
+  }
+  private Set<Point> getPointsForFunction(Function function){
+
+    Set<Point> points = new HashSet<>();
+    BigDecimal increment = spacing.divide(samplesForPlottingPerCell);
+    for (double i = 0; i < width; i += spacing.doubleValue()){
+      for (double j = 0; j < spacing.doubleValue(); j += increment.doubleValue() ){
+        BigDecimal x = BigDecimal.valueOf(i + j);
+        BigDecimal y = function.evaluate(x);
+        points.add(new Point(x, y));
+      }
+    }
+    ArrayList<Point> pointsList = new ArrayList<>();
+    pointsList.addAll(points);
+    Collections.sort(pointsList);
+    return points;
+  }
   private int getCellForPoint(BigDecimal p){
     return (p.divide(spacing)).round(new MathContext(0)).intValue();
   }
@@ -105,7 +179,8 @@ public class Grapher {
     }
 
     //horizontal axis
-    BigDecimal hLabel = step;
+    BigDecimal hLabel = BigDecimal.valueOf(0.0);
+    hLabel = hLabel.add(step);
     currentGraphState[0][0] = leftPadding;
     currentGraphState[0][1] = injectNumberInCell(BigDecimal.valueOf(0.0));
     for (int i = 3; i < width + 2; i+=2){
@@ -164,15 +239,31 @@ public class Grapher {
 
   public static void main(String args[]){
     Grapher grapher = new Grapher();
-    HashMap<BigDecimal, BigDecimal> points = new HashMap<>();
-    points.put(new BigDecimal("0"), new BigDecimal("0"));
-    points.put(new BigDecimal("0.6"), new BigDecimal("1.2"));
-    points.put(new BigDecimal("0.3"), new BigDecimal("0.1"));
-    points.put(new BigDecimal("0.3"), new BigDecimal("1.1"));
-    points.put(new BigDecimal("0.7"), new BigDecimal("0.4"));
+    Multimap<BigDecimal, BigDecimal> points = ArrayListMultimap.create();
+//    points.put(new BigDecimal("0"), new BigDecimal("0"));
+//    points.put(new BigDecimal("0.6"), new BigDecimal("1.2"));
+//    points.put(new BigDecimal("0.3"), new BigDecimal("0.1"));
+//    points.put(new BigDecimal("0.3"), new BigDecimal("1.1"));
+//    points.put(new BigDecimal("0.7"), new BigDecimal("0.4"));
+
+    ArrayList<Function> functions = new ArrayList<>();
+    functions.add(new Function(new Polynomial(BigDecimal.valueOf(0.01), new X(), BigDecimal.valueOf(2))));
+    functions.add(new Function(new Polynomial(BigDecimal.valueOf(0.03), new X(), BigDecimal.valueOf(2))));
+    functions.add(new Function(new Polynomial(BigDecimal.valueOf(0.2), new X(), BigDecimal.valueOf(2))));
+    functions.add(new Function(new Polynomial(BigDecimal.valueOf(5), new X(), BigDecimal.valueOf(0.5))));
+
+    grapher.graph(points, functions);
+
+    Collections.sort(functions, new FunctionComparater(4, 12));
+    Collections.reverse(functions);
+    for (Function f : functions){
+      System.out.println(String.format(f.toString() + " integral:%s", f.integrate(0.01, 4,12).toString()));
+    }
 
 
-    grapher.graph(points, null);
+    grapher.integrateFunctions(functions.subList(0,2), 4, 12);
+
+
   }
 
 
