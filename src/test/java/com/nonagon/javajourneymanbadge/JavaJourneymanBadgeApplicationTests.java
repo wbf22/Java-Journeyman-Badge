@@ -8,6 +8,9 @@ class JavaJourneymanBadgeApplicationTests {
 
     @Test
     void contextLoads() {
+
+
+
     }
 
 }

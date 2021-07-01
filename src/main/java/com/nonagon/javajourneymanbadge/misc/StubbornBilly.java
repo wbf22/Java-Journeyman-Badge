@@ -1,9 +1,11 @@
 package com.nonagon.javajourneymanbadge.misc;
 
 import com.nonagon.javajourneymanbadge.clarice.ClariceBrain;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+@Component
 public final class StubbornBilly {
 
     private final boolean comeOut;

@@ -8,8 +8,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import org.springframework.stereotype.Component;
+
 import static com.nonagon.javajourneymanbadge.clarice.ClariceBrain.*;
 
+@Component
 public class KeywordManager {
 
     public void doProtectedKeywordFunctions(String input, Set<String> keywords) throws IOException {

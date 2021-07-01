@@ -56,6 +56,8 @@ public class ClariceBrain{
     @Autowired
     private Threads threads;
 
+    private KeywordManager keywordManager;
+
 
 
     public void run() {
@@ -186,7 +188,7 @@ public class ClariceBrain{
 
 
         Set<String> protectedKeywords = checkForClauseWords(input, "PROTECTED_KEYWORDS");
-        if(protectedKeywords.size() > 0){ new KeywordManager().doProtectedKeywordFunctions(input, protectedKeywords); return; }
+        if(protectedKeywords.size() > 0){ keywordManager.doProtectedKeywordFunctions(input, protectedKeywords); return; }
 
         File file = new File(CLAUSE_FILES_INDEX);
         Scanner scanner = new Scanner(file);

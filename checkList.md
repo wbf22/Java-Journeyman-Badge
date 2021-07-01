@@ -157,22 +157,21 @@ parsing > KeywordManager.java uses StringTokenizer to read user input.
 I use StringBuilder all over the place.
 [comment]: <> (Search, parse and build strings &#40;including Scanner, StringTokenizer, StringBuilder, String and Formatter&#41;)
 
-In ClariceBrain.java checkForKeyWords() uses regex to parse input
-looking for keywords.
+In ClariceBrain.java checkForKeyWords() uses regex to parse input looking for keywords.
 [comment]: <> (Search, and replace strings by using regular expressions, using expression patterns for matching limited to: . &#40;dot&#41;, * &#40;star&#41;, + &#40;plus&#41;, ?, \d, \D, \s, \S,  \w, \W, \b, \B, [], &#40;&#41;.)
 
+In graphing > Grapher.java in the main function I use String.format() and I format a string for ouput.
 [comment]: <> (Format strings using the formatting parameters: %b, %c, %d, %f, and %s in format strings.)
 
-Create and use Map implementations
 ### Java I/O Fundamentals
 In Threads.java in the threads package threadPicture() uses DataStream input and output. 
 BufferedReader, File and FileReader are used in printFile() in ClariceBrain.java.  
 ObjectStreams in and out are used in all of the functions in ClauseHelper.java under
 parsing. 
 
+In rap > Rap.java I use BufferedWriter to print out a rap. I also use FileWriter in Rap.java to save a rap in ClaricesFavoriteRaps.txt. I also used
+PrintWriter when I was saving the rap as well.
 [comment]: <> (Use streams to read from and write to files by using classes in the java.io package including, BufferedWriter, FileWriter, and PrintWriter)
-
-[comment]: <> (ObjectStreams and PrintWriter left.)
 
 ### Java File I/O (NIO.2)
 In parsing > KeywordManager.java in the removeIndexFile() function I get a path to a 
@@ -204,8 +203,11 @@ package.
 
 ### Spring
 
+This entire application is a spring app. It has one main component ClariceBrain.java which also contains two components Threads.java nad KeywordManager.java.
+Threads.java also contains a component DanceRunnable.java. In the seperate project miniSpringApp in miniSpringApp > xml I made a spring app with xml
 [comment]: <> (Write a spring application -- simple application &#40;simple xml configuration&#41;  -- Make a simple application with 3 components and two of the components use another component.  Wire them up in spring and show that each is used.)
 
+In the seperate project miniSpringApp in miniSpringApp > annotation I made the same one with annotations
 [comment]: <> (Write a spring application -- simple application &#40;simple annotation configuration&#41;  -- Same as the simple XML app, but use Spring Annotations instead.)
 ### Testing
 
